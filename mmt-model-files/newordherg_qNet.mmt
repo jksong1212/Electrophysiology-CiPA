@@ -1,0 +1,1064 @@
+[[model]]
+name: ohara-2017
+date: 2021-09-07
+author: Jaekyung Song
+desc: """
+    This model includes Funny channel.
+    """
+# Initial values
+membrane.V      = -88.0145              # V=-87                      1                        -87.84
+sodium.Nai      = 6.46961           # nai=7.268004498            2                             7.23
+sodium.Na_ss    = 6.46967          # nass=nai      7.268089977             3
+potassium.Ki    = 145.501          # ki=144.6555918             4
+potassium.K_ss  = 145.501          # kss=ki   144.6555651                   5
+calcium.Cai     = 7.45321e-05      # cai=8.6e-05                 6
+calcium.cass    = 7.30454e-05         # cass=cai  8.49e-05                 7
+calcium.Ca_nsr  = 1.37897      # cansr=1.619574538                 8
+calcium.Ca_jsr  = 1.37944      # cajsr=cansr   1.571234014              9
+ina.m           = 0.00733485   # m=0      0.007344121102                   10
+ina.hf          = 0.698542     # hf=1     0.6981071913                  11
+ina.hs          = 0.698542     # hs=1     0.6980895801                  12
+ina.j           = 0.698542     # j=0.6979908432                        13
+ina.hsp         = 0.455526     # hsp=0.4549485525                      14
+ina.jp          = 0.698541     # jp=0.6979245865                        15
+inal.mL         = 0.000187813  # mL=0.0001882617273                       16
+inal.hL         = 0.513396     # hL=0.5008548855                       17
+inal.hLp        = 0.307923     # hLp=0.2693065357                      18
+ito.a           = 0.00100025   # a=0.001001097687                        19
+ito.iF          = 0.999555     # iF=0.9995541745                       20
+ito.iS          = 0.871715         # iS=0.5865061736
+ito.ap          = 0.000509652      # ap=0.0005100862934                       22
+ito.iFp         = 0.999555         # iFp=0.9995541823                      23
+ito.iSp         = 0.905466         # iSp=0.6393399482
+ical.d          = 2.33382e-09          # d=2.34e-9                       25
+ical.ff         = 1                # ff=0.9999999909                       26
+ical.fs         = 0.971897         # fs=0.9102412777
+ical.fcaf       = 1                # fcaf=1   0.9999999909                   28
+ical.fcas       = 1                # fcas=1   0.9998046777 
+ical.jca        = 1                # jca=1   0.9999738312           30
+ical.nca        = 0.0015391        # nca=0.002749414044
+ical.ffp        = 1                # ffp=0.9999999909             32
+ical.fcafp      = 1                # fcafp=0.9999999909            33
+ikr.IC1         = 0.999637         #
+ikr.IC2         = 6.83208e-05      #
+ikr.C1          = 1.80145e-08      #
+ikr.C2          = 8.26619e-05      #
+ikr.O           = 0.00015551       #
+ikr.IO          = 5.67623e-05      #  5.67623e-05 
+ikr.IObound     = 0                #
+ikr.Obound      = 0                #
+ikr.Cbound      = 0                #
+ikr.D           = 0                #
+iks.xs1         = 0.130941         # xs1=0.2707758025                      36
+iks.xs2         = 0.000192517      # xs2=0.0001928503426
+ik1.xk1         = 0.996756     # xk1=0.9967597594                      38
+ryr.Jrelnp      = 1.46507e-07           # Jrelnp=2.5e-7
+ryr.Jrelp       = 1.83132e-07          # Jrelp=3.12e-7                    40
+camk.CaMKt      = 0.00325232     # CaMKt=0.00325232          0.0125840447          41
+if.Xf           = 0.006403385049126155
+
+#
+# Engine variables
+#
+[engine]
+time = 0 in [ms] bind time
+pace = 0 bind pace
+
+#
+# Membrane potential
+# Page 5
+#
+[membrane]
+dot(V) = -(i_ion + stimulus.i_stim)
+    label membrane_potential
+    in [mV]
+i_ion = (ina.INa 
+        + inal.INaL 
+        + ito.Ito 
+        + ical.ICaL 
+        + ical.ICaNa 
+        + ical.ICaK 
+        + ikr.IKr 
+        + iks.IKs 
+        + ik1.IK1 
+        + inaca.INaCa
+        + inacass.INaCa_ss
+        + inak.INaK
+        + inab.INab  
+        + ikb.IKb  
+        + ipca.IpCa 
+        + icab.ICab       
+        + if.iF
+        )
+#i_ion = (sodium.INa_tot
+#        + sodium.INa_ss_tot
+#        + calcium.ICa_tot
+#        + calcium.ICa_ss_tot
+#        + potassium.IK_tot
+#        + potassium.IK_ss_tot
+#        )
+    label cellular_current
+    in [uA/uF]
+
+    
+
+[qnet]
+qNet = inal.INaL + ical.ICaL + ito.Ito + ikr.IKr + iks.IKs + ik1.IK1
+qNet_JK = ikr.IKr + ical.ICaL + ina.INa + ito.Ito + ik1.IK1 + if.iF + iks.IKs 
+
+#
+# Stimulus current
+# Page 5
+#
+[stimulus]
+i_stim = engine.pace * amplitude
+amplitude = -80 [uA/uF]
+
+#
+# Cell geometry
+# Page 6
+#
+[cell]
+mode = 0
+    desc: The type of cell. Endo = 0, Epi = 1, Mid = 2
+L = 0.01 [cm] : Cell length
+rad = 0.0011 [cm] :  Cell radius
+vcell = 1000 * 3.14 * rad * rad * L
+    in [uL]
+    desc: Cell volume
+Ageo = 2*3.14 * rad * rad + 2 * 3.14 * rad * L
+    in [cm^2]
+    desc: Geometric cell area
+Acap = 2 * Ageo
+    in [cm^2]
+    desc: Capacitative membrane area
+vmyo = 0.68 * vcell
+    in [uL]
+    desc: Volume of the cytosolic compartment
+vnsr = 0.0552 * vcell
+    in [uL]
+    desc: Volume of the NSR compartment
+vjsr = 0.0048 * vcell
+    in [uL]
+    desc: Volume of the JSR compartment
+vss = 0.02 * vcell
+    in [uL]
+    desc: Volume of the Submembrane space near the T-tubules
+AF = Acap / phys.F
+
+
+#
+# Physical constants
+# Page 2
+#
+[phys]
+R = 8314  [J/kmol/K] : Gas constant
+T = 310   [K] : Temperature
+F = 96485 [C/mol] : Faraday's constant
+RTF  = R*T/F
+FRT  = F/(R*T)
+FFRT = F*F/(R*T)
+zna = 1
+zca = 2
+zk = 1
+
+
+#
+# CaMKII signalling
+#
+[camk]
+KmCaMK = 0.15
+aCaMK  = 0.05
+bCaMK  = 0.00068
+CaMKo  = 0.05
+KmCaM  = 0.0015
+CaMKb  = CaMKo * (1.0 - CaMKt) / (1.0 + KmCaM / calcium.cass)
+CaMKa  = CaMKb + CaMKt
+dot(CaMKt) = aCaMK * CaMKb * (CaMKb+CaMKt) - bCaMK*CaMKt
+f = 1.0 / (1.0 + KmCaMK / CaMKa)
+    desc: Fraction of phosphorylated channels
+
+
+
+#
+# Intracellular Sodium concentrations
+# Page 18
+#
+[sodium]
+use cell.AF, cell.vss, cell.vmyo, cell.Acap
+cm = 1.0
+INa_tot    = ina.INa + inal.INaL + 3*inaca.INaCa + 3*inak.INaK + inab.INab 
+dot(Nai)   = (-INa_tot * Acap * cm)/ (phys.F * vmyo) + diff.JdiffNa * vss / vmyo
+    desc: Intracellular Potassium concentration
+INa_ss_tot = ical.ICaNa + 3*inacass.INaCa_ss
+dot(Na_ss) = -INa_ss_tot * cm * Acap / (phys.F * vss) - diff.JdiffNa
+
+#
+# Intracellular Potassium concentrations
+# Page 18
+#
+[potassium]
+use cell.AF, cell.vss, cell.vmyo, cell.Acap
+cm = 1.0
+IK_tot = (ito.Ito
+        + ikr.IKr
+        + iks.IKs
+        + ik1.IK1
+        + ikb.IKb
+        - 2 * inak.INaK
+        )
+dot(Ki)  = -(IK_tot + stimulus.i_stim) * cm * Acap / (phys.F * vmyo) + diff.JdiffK * vss / vmyo
+    desc: Intracellular Potassium concentration
+IK_ss_tot = ical.ICaK
+dot(K_ss) = -IK_ss_tot * cm * Acap / (phys.F * vss) - diff.JdiffK
+    desc: Potassium concentration in the T-Tubule subspace
+
+#
+# Intracellular Calcium concentrations and buffers
+# Page 18
+#
+[calcium]
+use cell.AF, cell.vmyo, cell.vnsr, cell.vjsr, cell.vss, cell.Acap
+cm = 1.0
+cmdnmax = if(cell.mode == 1, 1.3*cmdnmax_b, cmdnmax_b)
+    cmdnmax_b = 0.05
+kmcmdn  = 0.00238
+trpnmax = 0.07
+kmtrpn  = 0.0005
+BSRmax  = 0.047
+KmBSR   = 0.00087
+BSLmax  = 1.124
+KmBSL   = 0.0087
+csqnmax = 10.0
+kmcsqn  = 0.8
+ICa_tot = ipca.IpCa + icab.ICab - 2*inaca.INaCa   # ipca.IpCa + icab.ICab - 2*inaca.INaCa_i
+dot(Cai)  = Bcai * (-ICa_tot * cm * Acap / (2*phys.F*vmyo) - serca.Jup  * vnsr / vmyo + diff.Jdiff * vss / vmyo )
+    Bcai = 1 / (1 + cmdnmax * kmcmdn / (a*a) + trpnmax * kmtrpn / (b*b))
+    a = kmcmdn + calcium.Cai
+    b = kmtrpn + calcium.Cai
+    desc: Intracellular Calcium concentratium
+    in [mmol/L]
+ICa_ss_tot = ical.ICaL - 2 * inacass.INaCa_ss
+dot(cass) = Bcass * (-ICa_ss_tot * cm * Acap / (2*phys.F*vss) + ryr.Jrel * vjsr / vss - diff.Jdiff )
+    Bcass = 1 / (1 + BSRmax * KmBSR / (a*a) + BSLmax * KmBSL / (b*b))
+    a = KmBSR + calcium.cass
+    b = KmBSL + calcium.cass
+    desc: Calcium concentratium in the T-Tubule subspace
+    in [mmol/L]
+dot(Ca_nsr) = serca.Jup - trans_flux.Jtr * vjsr / vnsr
+    desc: Calcium concentration in the NSR subspace
+    in [mmol/L]
+dot(Ca_jsr) = Bcajsr * (trans_flux.Jtr - ryr.Jrel)
+    Bcajsr = 1 / (1 + csqnmax * kmcsqn / (kmcsqn + calcium.Ca_jsr)^2)
+    a = kmcsqn + calcium.Ca_jsr
+    desc: Calcium concentration in the JSR subspace
+    in [mmol/L]
+
+
+#
+# Extracellular concentrations
+# Page 5
+#
+[extra]
+Nao = 140 [mmol/L] : Extracellular Na+ concentration
+Cao = 1.8 [mmol/L] : Extracellular Ca2+ concentration
+Ko  = 5.4 [mmol/L] : Extracellular K+ concentration
+
+
+#
+# Reversal potentials
+# Page 6
+#
+[nernst]
+ENa = phys.RTF * log(extra.Nao / sodium.Nai)
+    in [mV]
+    desc: Reversal potential for Sodium currents
+EK = phys.RTF * log(extra.Ko / potassium.Ki)
+    in [mV]
+    desc: Reversal potential for Potassium currents
+PKNa = 0.01833
+    desc: Permeability ratio K+ to Na+
+EKs = phys.RTF * log((extra.Ko + PKNa * extra.Nao) / (potassium.Ki + PKNa * sodium.Nai))
+    desc: Reversal potential for IKs
+    in [mV]
+
+
+
+#
+# If :: Funny
+#
+[if]
+use membrane.V
+xF1 = 5.79000000e-07
+xF2 = -1.45897122e+01
+xF5 = 2.00866502e+04
+xF6 = 1.02023529e+01
+xF_const = 2.39452914e+01
+# parameter-dependent values:
+xF3 = xF5*xF1
+xF4 = 1/((1/xF2)+(1/xF6))
+# 16: Xf (dimensionless) (inactivation in i_f)
+alpha_Xf = xF1*exp((V)/xF2)
+beta_Xf = xF3*exp((V)/xF4)
+Xf_inf = alpha_Xf/(alpha_Xf+beta_Xf)
+tau_Xf = ((1./(alpha_Xf+beta_Xf))+xF_const)
+dot(Xf) = (Xf_inf-Xf)/tau_Xf
+# Current:
+Gffc = 1.0
+G_F = 1.0
+gf = 0.0435 
+Gf = G_F * gf / Gffc
+# nS_per_pF (in i_f)
+NatoK_ratio = 0.491  # Verkerk et al. 2013
+Na_frac = NatoK_ratio/(NatoK_ratio+1)
+i_fNa = Na_frac*Gf*Xf*(V-nernst.ENa)
+i_fK = (1-Na_frac)*Gf*Xf*(V-nernst.EK)
+iF = i_fNa+i_fK
+
+
+
+
+#
+# INa :: Fast Sodium current
+# Page 6
+#
+# The fast sodium current is modelled using a Hodgkin-Huxley type formulation
+# including activation (m), slow and fast components of inactivation (h) and
+# recovery from inactivation (j). The slow component of inactivation and
+# recovery from inactivation have an alternative formulation for CaMKII-
+# phosphorylated channels.
+#
+[ina]
+use membrane.V
+mtD1 = 6.765
+mtD2 = 8.552
+mtV1 = 11.64
+mtV2 = 34.77
+mtV3 = 77.42
+mtV4 = 5.955
+tm  = 1 / (mtD1 * exp((V + mtV1) / mtV2) + mtD2 * exp(-(V + mtV3) / mtV4))
+    desc: Time constant for m-gate
+    in [ms]
+mssV1 = 39.57
+mssV2 = 9.871
+mss  = 1 / (1 + exp(-(V + mssV1)/mssV2))
+    desc: Steady state value for m-gate
+dot(m) = (mss - m) / tm
+    desc: Activation gate for INa channels
+hssV1 = 82.9 
+hssV2 = 6.086 
+shift_INa_inact = 0.0
+hss = 1 / (1 + exp((V + hssV1-shift_INa_inact) / hssV2))
+    desc: Steady-state value for h-gate
+thf = 1 / (1.432e-5 * exp(-(V + 1.196 - shift_INa_inact) / 6.285) + 6.1490 * exp((V + 0.5096 - shift_INa_inact) / 20.27))
+    desc: Time constant for fast development of inactivation in INa
+    in [ms]
+ths = 1 / (0.009794 * exp(-(V + 17.95-shift_INa_inact) / 28.05) + 0.3343 * exp((V + 5.7300 - shift_INa_inact) / 56.66))
+    desc: Time constant for slow development of inactivation in INa
+    in [ms]
+Ahf = 0.99 : Fraction of INa channels with fast inactivation
+Ahs = 1.0 - Ahf : Fraction of INa channels with slow inactivation
+dot(hf) = (hss - hf) / thf
+    desc: Fast componennt of the inactivation gate for INa channels
+dot(hs) = (hss - hs) / ths
+    desc: Slow componennt of the inactivation gate for non-phosphorylated INa channels
+h = Ahf * hf + Ahs * hs
+    desc: Inactivation gate for INa
+tj = 2.038 + 1 / (0.02136 * exp(-(V + 100.6 - shift_INa_inact) / 8.281) + 0.3052 * exp((V + 0.9941 - shift_INa_inact) / 38.45))
+    desc: Time constant for j-gate in INa
+    in [ms]
+jss = hss
+    desc: Steady-state value for j-gate in INa
+dot(j) = (jss - j) / tj
+    desc: Recovery from inactivation gate for non-phosphorylated INa channels
+# Phosphorylated channels
+thsp = 3 * ths
+    desc: Time constant for h-gate of phosphorylated INa channels
+    in [ms]
+hssp = 1 / (1 + exp((V + 89.1 - shift_INa_inact) / 6.086))
+    desc: Steady-state value for h-gate of phosphorylated INa channels
+dot(hsp) = (hssp - hsp) / thsp
+    desc: Slow componennt of the inactivation gate for phosphorylated INa channels
+hp = Ahf * hf + Ahs * hsp
+    desc: Inactivation gate for phosphorylated INa channels
+tjp = 1.46 * tj
+    desc: Time constant for the j-gate of phosphorylated INa channels
+    in [ms]
+dot(jp) = (jss - jp) / tjp
+    desc: Recovery from inactivation gate for phosphorylated INa channels
+# Current
+GNafc = 1.0
+GNa = 75/GNafc  : Maximum conductance of INa channels
+fINap = camk.f
+INa = GNa * (V - nernst.ENa) * m^3 * ((1 - fINap) * h * j + fINap * hp * jp)
+    in [uA/uF]
+    desc: Fast sodium current
+
+#
+# INaL :: Late component of the Sodium current
+# Page 7
+#
+[inal]
+use membrane.V
+use ina.tm
+mLss = 1 / (1 + exp(-(V + 42.85) / 5.264))
+    desc: Steady state value of m-gate for INaL
+tmL = tm
+dot(mL) = (mLss - mL) / tmL
+    desc: Activation gate for INaL
+thL = 200.0 [ms] : Time constant for inactivation of non-phosphorylated INaL channels
+hLss = 1 / (1 + exp((V + 87.61) / 7.488))
+    desc: Steady-state value for inactivation of non-phosphorylated INaL channels
+dot(hL) = (hLss - hL) / thL
+    desc: Inactivation gate for non-phosphorylated INaL channels
+hLssp = 1 / (1 + exp((V + 93.81) / 7.488))
+    desc: Steady state value for inactivation of phosphorylated INaL channels
+thLp = 3 * thL
+    in [ms]
+    desc: Time constant for inactivation of phosphorylated INaL channels
+dot(hLp) = (hLssp - hLp) / thLp
+    desc: Inactivation gate for phosphorylated INaL channels
+# Current
+GNaLfc = 1.0
+GNaL = if(cell.mode == 1, GNaL_b*0.6, GNaL_b)
+    GNaL_b = 0.0075/GNaLfc
+    desc: Adjustment for different cell types
+fINaLp = camk.f
+INaL = GNaL * (V - nernst.ENa) * mL * ((1 - fINaLp) * hL + fINaLp * hLp)
+
+#
+# Ito :: Transient outward Potassium current
+# page 8
+#
+[ito]
+use membrane.V
+ass = 1 / (1 + exp(-(V - 14.34) / 14.82))
+    desc: Steady-state value for Ito activation
+ta = 1.0515 / (one + two)
+    one = 1 / (1.2089 * (1 + exp(-(V - 18.4099) / 29.3814)))
+    two = 3.5 / (1 + exp((V + 100) / 29.3814))
+    desc: Time constant for Ito activation
+    in [ms]
+dot(a) = (ass - a) / ta
+    desc: Ito activation gate
+iss = 1 / (1 + exp((V + 43.94) / 5.711))
+    desc: Steady-state value for Ito inactivation
+delta_epi = if(cell.mode == 1,
+    1 - (0.95 / (1 + exp((V + 70) / 5))),
+    1)
+    desc: Adjustment for different cell types
+tiF_b = (4.562 + 1 / (0.3933 * exp(-(V+100) / 100) + 0.08004 * exp((V + 50) / 16.59)))
+    desc: Time constant for fast component of Ito inactivation
+    in [ms]
+tiS_b = (23.62 + 1 / (0.001416 * exp(-(V + 96.52) / 59.05) + 1.780e-8 * exp((V + 114.1) / 8.079)))
+    desc: Time constant for slow component of Ito inactivation
+    in [ms]
+tiF = tiF_b * delta_epi
+tiS = tiS_b * delta_epi
+AiF = 1 / (1 + exp((V - 213.6) / 151.2))
+    desc: Fraction of fast inactivating Ito channels
+AiS = 1 - AiF
+dot(iF) = (iss - iF) / tiF
+    desc: Fast component of Ito activation
+dot(iS) = (iss - iS) / tiS
+    desc: Slow component of Ito activation
+i = AiF * iF + AiS * iS
+    desc: Inactivation gate for non-phosphorylated Ito
+dot(ap) = (assp - ap) / ta
+    assp=1.0/(1.0+exp(-(V-24.34)/14.82))
+dti_develop = 1.354 + 1e-4 / (exp((V - 167.4) / 15.89) + exp(-(V - 12.23) / 0.2154))
+dti_recover = 1 - 0.5 / (1 + exp((V+70) / 20))
+tiFp = dti_develop * dti_recover * tiF
+    desc: Time constant for fast component of inactivation of phosphorylated Ito channels
+    in [ms]
+tiSp = dti_develop * dti_recover * tiS
+    desc: Time constant for slot component of inactivation of phosphorylated Ito channels
+    in [ms]
+dot(iFp) = (iss - iFp) / tiFp
+    desc: Fast component of inactivation of phosphorylated Ito channels
+dot(iSp) = (iss - iSp) / tiSp
+    desc: Slow component of inactivation of phosphorylated Ito channels
+myip = AiF * iFp + AiS * iSp
+    desc: Inactivation gate for phosphorylated Ito channels
+# Current
+Gtofc = 1.0
+Gto = piecewise(cell.mode == 1, Gto_b*4.0, cell.mode == 2, Gto_b*4.0, Gto_b)
+    Gto_b = 0.02/Gtofc
+    desc: Maximum conductance of Ito channels
+fItop = camk.f
+Ito = Gto * (V - nernst.EK) * ((1 - fItop) * a * i + fItop * ap * myip)
+    desc: Transient outward Potassium current
+
+#
+# ICaL  :: L-type Calcium current
+# ICaNa :: Sodium current through the L-type Calcium channel
+# ICaK  :: Potassium current through the L-type Calcium channel
+# Page 9
+#
+# The ICaL channel is modeled using activation, inactivation (fast and slow),
+# Ca-dependent inactivation (fast and slow) and recovery from Ca-dependent
+# inactivation.
+# Inactivation and Ca-dependent inactivation have an alternative formulation
+# for CaMKII phosphorylated channels.
+#
+#
+[ical]
+use membrane.V
+vfrt = V * phys.FRT
+vffrt = V * phys.FFRT
+# Activation
+dss = 1 / (1 + exp(-(V + 3.94) / 4.23))
+    desc: Steady-state value for activation gate of ICaL channel
+td = 0.6 + 1 / (exp(-0.05 * (V + 6)) + exp(0.09 * (V + 14)))
+    desc: Time constant for activation gate of ICaL channel
+    in [ms]
+dot(d) = (dss - d) / td
+    desc: Activation gate of ICaL channel
+# Inactivation
+fss = 1 / (1 + exp((V + 19.58) / 3.696))
+    desc: Steady-state value for inactivation gate of ICaL channel
+tff = 7 + 1 / (0.0045 * exp(-(V + 20) / 10) + 0.0045 * exp((V + 20) / 10))
+    desc: Time constant for fast inactivation of ICaL channels
+    in [ms]
+tfs = 1000 + 1 / (0.000035 * exp(-(V + 5) / 4) + 0.000035 * exp((V + 5) / 6))
+    desc: Time constant for fast inactivation of ICaL channels
+    in [ms]
+Aff = 0.6 : Fraction of ICaL channels with fast inactivation
+Afs = 1 - Aff : Fraction of ICaL channels with slow inactivation
+dot(ff) = (fss - ff) / tff
+    desc: Fast inactivation of ICaL channels
+dot(fs) = (fss - fs) / tfs
+    desc: Slow inactivation of ICaL channels
+f = Aff * ff + Afs * fs
+    desc: Inactivation of ICaL channels
+# Ca-dependent inactivation
+fcass = fss
+    desc: Steady-state value for Ca-dependent inactivation of ICaL channels
+tfcaf = 7 + 1 / (0.04 * exp(-(V - 4) / 7.0) + 0.04 * exp((V - 4) / 7))
+    desc: Time constant for fast Ca-dependent inactivation of ICaL channels
+    in [ms]
+tfcas = 100 + 1 / (0.00012 * exp(-V / 3) + 0.00012 * exp(V / 7))
+    desc: Time constant for slow Ca-dependent inactivation of ICaL channels
+    in [ms]
+Afcaf = 0.3 + 0.6 / (1 + exp((V - 10) / 10))
+    desc: Fraction of ICaL channels with fast Ca-dependent inactivation
+Afcas = 1 - Afcaf
+    desc: Fraction of ICaL channels with slow Ca-dependent inactivation
+dot(fcaf) = (fcass - fcaf) / tfcaf
+    desc: Fast Ca-dependent inactivation of ICaL channels
+dot(fcas) = (fcass - fcas) / tfcas
+    desc: Slow Ca-dependent inactivation of ICaL channels
+fca = Afcaf * fcaf + Afcas * fcas
+    desc: Ca-dependent inactivation of ICaL channels
+# Recovery from Ca-dependent inactivation
+tjca = 75 [ms] : Time constant of recovery from Ca-dependent inactivation
+dot(jca) = (fcass - jca) / tjca
+    desc: Recovery from Ca-dependent inactivation
+# Inactivation of phosphorylated channels
+tffp = 2.5 * tff
+    in [ms]
+    desc: Time constant for fast inactivation of phosphorylated ICaL channels
+dot(ffp) = (fss - ffp) / tffp
+    desc: Fast inactivation of phosphorylated ICaL channels
+fp = Aff * ffp + Afs * fs
+    desc: Inactivation of phosphorylated ICaL channels
+# Ca-dependent inactivation of phosphorylated channels
+tfcafp = 2.5 * tfcaf
+    in [ms]
+    desc: Time constant for fast Ca-dependent inactivation of phosphorylated ICaL channels
+dot(fcafp) = (fcass - fcafp) / tfcafp
+    desc: Fast Ca-dependent inactivation of phosphorylated ICaL channels
+fcap = Afcaf * fcafp + Afcas * fcas
+    desc: Ca-dependent inactivation of phosphorylated ICaL channels
+# Fraction of channels in Ca-depdent inactivation mode
+dot(nca) = anca * k2n - nca*km2n
+    anca = 1 / (k2n / km2n + (1 + Kmn / calcium.cass)^4.0)
+    Kmn = 0.002
+    k2n = 1000
+    km2n = jca * 1.0
+    desc: Fraction of channels in Ca-depdent inactivation mode
+# Total currents through ICaL channel
+PhiCaL  = 4 * vffrt *(       calcium.cass  * exp(2 * vfrt) - 0.341 * extra.Cao) / (exp(2 * vfrt) - 1)
+PhiCaNa = 1 * vffrt *(0.75 * sodium.Na_ss   * exp(1 * vfrt) - 0.75  * extra.Nao) / (exp(1 * vfrt) - 1)
+PhiCaK  = 1 * vffrt *(0.75 * potassium.K_ss * exp(1 * vfrt) - 0.75  * extra.Ko ) / (exp(1 * vfrt) - 1)
+PCafc = 1.0
+PCa = piecewise(cell.mode == 0, base, cell.mode == 1, 1.2*base, 2.5*base)
+    base = 0.0001/PCafc
+PCap   = 1.1      * PCa
+PCaNa  = 0.00125  * PCa
+PCaK   = 3.574e-4 * PCa
+PCaNap = 0.00125  * PCap
+PCaKp  = 3.574e-4 * PCap
+flCaLp = camk.f
+g  = d * (f  * (1 - nca) + jca * fca  * nca)
+    desc: Conductivity of non-phosphorylated ICaL channels
+gp = d * (fp * (1 - nca) + jca * fcap * nca)
+    desc: Conductivity of phosphorylated ICaL channels
+ICaL   = (1 - flCaLp) * PCa   * PhiCaL  * g + flCaLp * PCap   * PhiCaL  * gp
+    desc: L-type Calcium current
+    in [uA/uF]
+ICaNa  = (1 - flCaLp) * PCaNa * PhiCaNa * g + flCaLp * PCaNap * PhiCaNa * gp
+    desc: Sodium current through ICaL channels
+    in [uA/uF]
+ICaK   = (1 - flCaLp) * PCaK  * PhiCaK  * g + flCaLp * PCaKp  * PhiCaK  * gp
+    desc: Potassium current through ICaL channels
+    in [uA/uF]
+
+#
+# IKr :: Rapid delayed rectifier Potassium current
+# Page 11
+#
+# Modelled with activation (fast and slow) and an instantaneous inactivation.
+#
+[ikr]
+use membrane.V
+# Activation
+A1 = 0.0264
+B1 = 4.631E-05
+q1 = 4.843
+A2 = 4.986E-06 
+B2 = -0.004226
+q2 = 4.23  
+A3 = 0.001214
+B3 = 0.008516
+q3 = 4.962
+A4 = 1.854E-05
+B4 = -0.04641 
+q4 = 3.769
+A11 = 0.0007868
+B11 = 1.535E-08
+q11 = 4.942
+A21 = 5.455E-06
+B21 = -0.1688
+q21 = 4.156
+A31 = 0.005509
+B31 = 7.771E-09 
+q31 = 4.22
+A41 = 0.001416
+B41 = -0.02877
+q41 = 1.459
+A51 = 0.4492
+B51 = 0.008595
+q51 = 5
+A52 = 0.3181
+B52 = 3.613E-08
+q52 = 4.663
+A53 = 0.149
+B53 = 0.004668
+q53 = 2.412
+A61 = 0.01241
+B61 = 0.1725
+q61 = 5.568
+A62 = 0.3226
+B62 = -0.0006575
+q62 = 5
+A63 = 0.008978
+B63 = -0.02215
+q63 = 5.682 
+Kmax = 0
+Ku = 0
+n = 1
+halfmax = 1
+Kt = 3.5e-05
+Vhalf = 1
+Temp = 37
+dot(IC1) = (-(A11 * exp(B11*V) * IC1 * exp((Temp-20.0)*log(q11)/10.0) - (A21 * exp(B21*V) * IC2 * exp((Temp-20.0)*log(q21)/10.0)))) + A51 * exp(B51*V) * C1 * exp((Temp-20.0)*log(q51)/10.0) - (A61 * exp(B61*V) * IC1 * exp((Temp-20.0)*log(q61)/10.0))
+dot(IC2) =   (A11 * exp(B11*V) * IC1 * exp((Temp-20.0)*log(q11)/10.0) - (A21 * exp(B21*V) * IC2 * exp((Temp-20.0)*log(q21)/10.0)) - (A3 * exp(B3*V) * IC2 * exp((Temp-20.0)*log(q3)/10.0) - (A4 * exp(B4*V) * IO * exp((Temp-20.0)*log(q4)/10.0))))  + A52 * exp(B52*V) * C2 * exp((Temp-20.0)*log(q52)/10.0) - (A62 * exp(B62*V) * IC2 * exp((Temp-20.0)*log(q62)/10.0))
+dot(C1) =   -(A1 * exp(B1*V) * C1 * exp((Temp-20.0)*log(q1)/10.0) - (A2 * exp(B2*V) * C2 * exp((Temp-20.0)*log(q2)/10.0))) - (A51 * exp(B51*V) * C1 * exp((Temp-20.0)*log(q51)/10.0) - (A61 * exp(B61*V) * IC1 * exp((Temp-20.0)*log(q61)/10.0)))
+dot(C2) =     A1 * exp(B1*V) * C1 * exp((Temp-20.0)*log(q1)/10.0) - (A2 * exp(B2*V) * C2 * exp((Temp-20.0)*log(q2)/10.0))  - (A31 * exp(B31*V) * C2 * exp((Temp-20.0)*log(q31)/10.0) - (A41 * exp(B41*V) * O   * exp((Temp-20.0)*log(q41)/10.0))) - (A52 * exp(B52*V) * C2 * exp((Temp-20.0)*log(q52)/10.0) - (A62 * exp(B62*V) * IC2 * exp((Temp-20.0)*log(q62)/10.0)))
+dot(O) = A31 * exp(B31*V) * C2 * exp((Temp-20.0)*log(q31)/10.0) - (A41 * exp(B41*V) * O * exp((Temp-20.0)*log(q41)/10.0)) - (A53 * exp(B53*V) * O * exp((Temp-20.0)*log(q53)/10.0) - (A63 * exp(B63*V) * IO * exp((Temp-20.0)*log(q63)/10.0))) - ((Kmax*Ku*exp(n*log(D)))/(exp(n*log(D))+halfmax) * O  - Ku * Obound)
+dot(IO) = (A3 * exp(B3*V) * IC2 * exp((Temp-20.0)*log(q3)/10.0) - (A4 * exp(B4*V) * IO * exp((Temp-20.0)*log(q4)/10.0))) + A53 * exp(B53*V) * O * exp((Temp-20.0)*log(q53)/10.0) - (A63 * exp(B63*V) * IO * exp((Temp-20.0)*log(q63)/10.0)) - ((Kmax*Ku*exp(n*log(D)))/(exp(n*log(D))+halfmax) * IO - (Ku*A53*exp(B53*V)*exp((Temp-20.0)*log(q53)/10.0))/(A63*exp(B63*V)*exp((Temp-20)*log(q63)/10)) * IObound)
+dot(IObound) = ( (Kmax * Ku * exp(n*log(D))) / (exp(n*log(D)) + halfmax) * IO - ( (Ku*A53*exp(B53*V)*exp((Temp-20.0)*log(q53)/10.0))/(A63*exp(B63*V)*exp((Temp-20.0)*log(q63)/10.0)) * IObound ) ) + Kt / (1 + exp(-(V-Vhalf)/6.789)) * Cbound - Kt * IObound
+dot(Obound) = ( (Kmax * Ku * exp(n*log(D))) / (exp(n*log(D)) + halfmax) *  O - Ku * Obound ) + Kt / (1 + exp(-(V-Vhalf)/6.789)) * Cbound - Kt * Obound
+dot(Cbound) = -( Kt / (1 + exp(-(V-Vhalf)/6.789)) * Cbound - Kt * Obound ) - ( Kt / (1 + exp(-(V-Vhalf)/6.789)) * Cbound - Kt * IObound )
+dot(D) = 0
+# Current
+GKrfc = 1.0
+GKr = piecewise(cell.mode == 1, GKr_b*1.3, cell.mode == 2, GKr_b*0.8, GKr_b)
+    GKr_b = 0.046/GKrfc
+    desc: Maximum conductance of IKr channels
+IKr = GKr * sqrt(extra.Ko / 5.4) * O * (V - nernst.EK)
+    desc: Rapid delayed Potassium current
+    in [uA/uF]
+
+#
+# IKs :: Slow delayed rectifier Potassium current
+# Page 11
+#
+# Modelled with two activation channels
+#
+[iks]
+use membrane.V
+xs1ss  = 1 / (1 + exp(-(V + 11.60) / 8.932))
+    desc: Steady-state value for activation of IKs channels
+txs1 = txs1_max + 1 / (2.326e-4 * exp((V + 48.28) / 17.80) + 0.001292 * exp(-(V + 210) / 230))
+    txs1_max = 817.3
+    desc: Time constant for slow, low voltage IKs activation
+dot(xs1) = (xs1ss - xs1) / txs1
+    desc: Slow, low voltage IKs activation
+xs2ss = xs1ss
+txs2 = 1 / (0.01 * exp((V - 50) / 20) + 0.0193 * exp(-(V + 66.54) / 31.0))
+    desc: Time constant for fast, high voltage IKs activation
+dot(xs2) = (xs2ss - xs2) / txs2
+    desc: Fast, high voltage IKs activation
+KsCa = 1 + 0.6 / (1.0 + (3.8e-5 / calcium.Cai)^1.4)
+    desc: Maximum conductance for IKs
+GKsfc = 1.0
+GKs = if(cell.mode == 1, GKs_b * 1.4, GKs_b)
+    GKs_b = 0.0034/GKsfc
+    desc: Conductivity adjustment for cell type
+IKs = GKs * KsCa * xs1 * xs2 * (V - nernst.EKs)
+    desc: Slow delayed rectifier Potassium current
+
+
+
+
+
+
+#
+# IK1 :: Inward rectifier Potassium current
+# Page 12
+#
+# Modelled with an activation channel and an instantaneous inactivation channel
+#
+[ik1]
+use membrane.V
+xk1ss = 1 / (1 + exp(-(V + 2.5538 * extra.Ko + 144.59) / (1.5692 * extra.Ko + 3.8115)))
+    desc: Steady-state value for activation of IK1 channels
+txk1 = 122.2 / (exp(-(V + 127.2) / 20.36) + exp((V + 236.8) / 69.33))
+    desc: Time constant for activation of IK1 channels
+dot(xk1) = (xk1ss - xk1) / txk1
+    desc: Activation of IK1 channels
+rk1 = 1 / (1 + exp((V + 105.8 - 2.6 * extra.Ko) / 9.493))
+    desc: Inactivation of IK1 channels
+GK1fc = 1.0
+GK1 = piecewise(cell.mode == 1, GK1_b * 1.2, cell.mode == 2, GK1_b * 1.3, GK1_b)
+    GK1_b = 0.1908/GK1fc
+    desc: Conductivity of IK1 channels, cell-type dependent
+IK1 = GK1 * sqrt(extra.Ko) * rk1 * xk1 * (V - nernst.EK)
+    desc: Inward rectifier Potassium current
+
+#
+# INaCa :: Sodium/Calcium exchange current
+# page 12
+#
+[inaca]
+use membrane.V
+use extra.Nao, extra.Cao
+use sodium.Nai, calcium.Cai
+kna1   = 15.0
+kna2   = 5.0
+kna3   = 88.12
+kasymm = 12.5
+wna    = 6.0e4
+wca    = 6.0e4
+wnaca  = 5.0e3 
+kcaon  = 1.5e6
+kcaoff = 5.0e3
+qna    = 0.5224
+qca    = 0.1670
+hca    = exp(qca * V * phys.FRT)
+hna    = exp(qna * V * phys.FRT)
+# Parameters h
+h1  = 1 + Nai / kna3 * (1 + hna)
+h2  = (Nai * hna) / (kna3 * h1)
+h3  = 1 / h1
+h4  = 1 + Nai / kna1 * (1 + Nai / kna2)
+h5  = Nai * Nai / (h4 * kna1 * kna2)
+h6  = 1 / h4
+h7  = 1 + Nao / kna3 * (1 + 1 / hna)
+h8  = Nao / (kna3 * hna * h7)
+h9  = 1 / h7
+h10 = kasymm + 1 + Nao / kna1 * (1 + Nao / kna2)
+h11 = Nao * Nao / (h10 * kna1 * kna2)
+h12 = 1 / h10
+# Parameters k
+k1   = h12 * Cao * kcaon
+k2   = kcaoff
+k3p  = h9 * wca
+k3pp = h8 * wnaca
+k3   = k3p + k3pp
+k4p  = h3 * wca / hca
+k4pp = h2 * wnaca
+k4   = k4p + k4pp
+k5   = kcaoff
+k6   = h6 * Cai * kcaon
+k7   = h5 * h2 * wna
+k8   = h8 * h11 * wna
+x1 = k2 * k4 * (k7 + k6) + k5 * k7 * (k2 + k3)
+x2 = k1 * k7 * (k4 + k5) + k4 * k6 * (k1 + k8)
+x3 = k1 * k3 * (k7 + k6) + k8 * k6 * (k2 + k3)
+x4 = k2 * k8 * (k4 + k5) + k3 * k5 * (k1 + k8)
+E1 = x1 / (x1 + x2 + x3 + x4)
+E2 = x2 / (x1 + x2 + x3 + x4)
+E3 = x3 / (x1 + x2 + x3 + x4)
+E4 = x4 / (x1 + x2 + x3 + x4)
+KmCaAct = 150.0e-6
+allo    = 1 / (1 + (KmCaAct / Cai)^2.0)
+JncxNa  = 3 * (E4 * k7 - E1 * k8) + E3 * k4pp - E2 * k3pp
+JncxCa  = E2 * k2 - E1 * k1
+Gncx = piecewise(cell.mode == 1, Gncx_b*1.1, cell.mode == 2, Gncx_b*1.4, Gncx_b)
+    Gncx_b = 0.0008
+INaCa = 0.8 * Gncx * allo * (phys.zna * JncxNa + phys.zca * JncxCa)
+    desc: Sodium/Calcium exchange current
+    in [uA/uF]
+
+#
+# INaCa_ss :: Sodium/Calcium exchanger current into the L-type subspace
+# Page 12
+#
+[inacass]
+use membrane.V
+use extra.Nao, extra.Cao
+use sodium.Na_ss, calcium.cass
+h1  = 1 + Na_ss / inaca.kna3 * (1 + inaca.hna)
+h2  = (Na_ss * inaca.hna)/(inaca.kna3 * h1)
+h3  = 1 / h1
+h4  = 1 + Na_ss / inaca.kna1 * (1 + Na_ss / inaca.kna2)
+h5  = Na_ss * Na_ss /(h4 * inaca.kna1 * inaca.kna2)
+h6  = 1 / h4
+h7  = 1 + Nao / inaca.kna3 * (1 + 1 / inaca.hna)
+h8  = Nao / (inaca.kna3 * inaca.hna * h7)
+h9  = 1/h7
+h10 = inaca.kasymm + 1 + Nao / inaca.kna1 * (1 + Nao / inaca.kna2)
+h11 = Nao * Nao / (h10 * inaca.kna1 * inaca.kna2)
+h12 = 1/h10
+k1   = h12 * Cao * inaca.kcaon
+k2   = inaca.kcaoff
+k3p  = h9 * inaca.wca
+k3pp = h8 * inaca.wnaca
+k3   = k3p + k3pp
+k4p  = h3 * inaca.wca / inaca.hca
+k4pp = h2 * inaca.wnaca
+k4   = k4p + k4pp
+k5   = inaca.kcaoff
+k6   = h6 * cass * inaca.kcaon
+k7   = h5 * h2 * inaca.wna
+k8   = h8 * h11 * inaca.wna
+x1 = k2 * k4 * (k7 + k6) + k5 * k7 * (k2 + k3)
+x2 = k1 * k7 * (k4 + k5) + k4 * k6 * (k1 + k8)
+x3 = k1 * k3 * (k7 + k6) + k8 * k6 * (k2 + k3)
+x4 = k2 * k8 * (k4 + k5) + k3 * k5 * (k1 + k8)
+E1 = x1 / (x1 + x2 + x3 + x4)
+E2 = x2 / (x1 + x2 + x3 + x4)
+E3 = x3 / (x1 + x2 + x3 + x4)
+E4 = x4 / (x1 + x2 + x3 + x4)
+KmCaAct = 150.0e-6
+allo    = 1 / (1 + (KmCaAct / cass)^2)
+JncxNa  = 3 * (E4 * k7 - E1 * k8) + E3 * k4pp - E2 * k3pp
+JncxCa  = E2 * k2 - E1 * k1
+INaCa_ss = 0.2 * inaca.Gncx * allo * (phys.zna * JncxNa + phys.zca * JncxCa)
+    desc: Sodium/Calcium exchange current into the T-Tubule subspace
+    in [uA/uF]
+
+#
+# INaK :: Sodium/Potassium ATPase current
+# Page 14
+#
+[inak]
+use membrane.V
+use extra.Nao, sodium.Nai, sodium.Na_ss
+use extra.Ko, potassium.Ki, potassium.K_ss
+k1p = 949.5
+k1m = 182.4
+k2p = 687.2
+k2m = 39.4
+k3p = 1899.0
+k3m = 79300.0
+k4p = 639.0
+k4m = 40.0
+Knai0 = 9.073
+Knao0 = 27.78
+delta = -0.1550
+Knai = Knai0 * exp(delta * V * phys.FRT / 3)
+Knao = Knao0 * exp((1.0-delta) * V * phys.FRT / 3)
+Kki    = 0.5
+Kko    = 0.3582
+MgADP  = 0.05
+MgATP  = 9.8
+Kmgatp = 1.698e-7
+H      = 1.0e-7
+eP     = 4.2
+Khp    = 1.698e-7
+Knap   = 224.0
+Kxkur  = 292.0
+P = eP / (1 + H / Khp + Nai / Knap + Ki / Kxkur)
+a1 = (k1p * (Nai / Knai)^3) / ((1 + Nai / Knai)^3 + (1 + Ki / Kki)^2 - 1)
+b1 = k1m * MgADP
+a2 = k2p
+b2 = (k2m * (Nao / Knao)^3) / ((1 + Nao / Knao)^3 + (1 + Ko / Kko)^2 - 1)
+a3 = (k3p * (Ko / Kko)^2  ) / ((1 + Nao / Knao)^3 + (1 + Ko / Kko)^2 - 1)
+b3 = (k3m * P * H)/(1 + MgATP / Kmgatp)
+a4 = (k4p * MgATP / Kmgatp) / (1 + MgATP / Kmgatp)
+b4 = (k4m * (Ki / Kki)^2) / ((1 + Nai / Knai)^3 + (1 + Ki / Kki)^2 - 1)
+x1 = a4 * a1 * a2 + b2 * b4 * b3 + a2 * b4 * b3 + b3 * a1 * a2
+x2 = b2 * b1 * b4 + a1 * a2 * a3 + a3 * b1 * b4 + a2 * a3 * b4
+x3 = a2 * a3 * a4 + b3 * b2 * b1 + b2 * b1 * a4 + a3 * a4 * b1
+x4 = b4 * b3 * b2 + a3 * a4 * a1 + b2 * a4 * a1 + b3 * b2 * a1
+E1 = x1 / (x1 + x2 + x3 + x4)
+E2 = x2 / (x1 + x2 + x3 + x4)
+E3 = x3 / (x1 + x2 + x3 + x4)
+E4 = x4 / (x1 + x2 + x3 + x4)
+JnakNa = 3 * (E1 * a3 - E2 * b3)
+JnakK  = 2 * (E4 * b1 - E3 * a1)
+Pnak = piecewise(cell.mode == 1, Pnak_b*0.9, cell.mode == 2, Pnak_b*0.7, Pnak_b)
+    Pnak_b = 30
+INaK = Pnak * (phys.zna * JnakNa + phys.zk * JnakK)
+    desc: Sodium/Potassium ATPase current
+    in [uA/uF]
+
+#
+# IKb :: Background Potassium current
+# Page 15
+#
+[ikb]
+use membrane.V
+xkb = 1 / (1 + exp(-(V - 14.48) / 18.34))
+GKb = if(cell.mode == 1, GKb_b * 0.6, GKb_b)
+    GKb_b = 0.003
+IKb = GKb * xkb * (V - nernst.EK)
+    desc: Background Potassium current
+    in [uA/uF]
+
+#
+# INab :: Background Sodium current
+# Page 15
+#
+[inab]
+use membrane.V
+PNab = 3.75e-10
+INab = PNab * V * phys.FFRT * (sodium.Nai * evf - extra.Nao) / (evf - 1)
+    evf = exp(V * phys.FRT)
+    desc: Background Sodium current
+    in [uA/uF]
+
+#
+# ICab :: Background Calcium current
+# Page 15
+#
+[icab]
+use membrane.V
+PCab=2.5e-8
+ICab = PCab * 4 * V * phys.FFRT * (calcium.Cai * evf2 - 0.341 * extra.Cao) / (evf2 - 1)
+    evf2 = exp(2 * V * phys.FRT)
+    desc: Background Calcium current
+    in [uA/uF]
+
+
+#
+# IpCa :: Sarcolemmal Calcium pump current
+# Page 15
+#
+[ipca]
+use membrane.V
+GpCa = 0.0005
+IpCa = GpCa * calcium.Cai / (0.0005 + calcium.Cai)
+    desc: Sarcolemmal Calcium pump current
+    in [uA/uF]
+
+
+#
+# Diffusion fluxes
+# Page 16
+#
+[diff]
+JdiffNa = (sodium.Na_ss - sodium.Nai) / 2
+JdiffK  = (potassium.K_ss  - potassium.Ki)  / 2
+Jdiff   = (calcium.cass - calcium.Cai) / 0.2
+
+
+
+
+#
+# Jrel :: SR Calcium release flux via Ryanodine receptor
+# Page 17
+#
+[ryr]
+use membrane.V
+bt=4.75
+a_rel=0.5*bt
+Jrel_inf = if(cell.mode == 2, Jrel_inf_temp * 1.7, Jrel_inf_temp)
+    Jrel_inf_temp = a_rel * -ical.ICaL / (1 + (1.5 / calcium.Ca_jsr)^8)
+dot(Jrelnp) = (Jrel_inf - Jrelnp) / tau_rel
+    tau_rel_temp = bt / (1.0 + 0.0123 / calcium.Ca_jsr)
+    tau_rel = if(tau_rel_temp < 0.001, 0.001, tau_rel_temp)    
+btp = 1.25*bt
+a_relp = 0.5*btp
+Jrel_infp = if(cell.mode == 2, Jrel_temp * 1.7, Jrel_temp)
+    Jrel_temp = a_relp * -ical.ICaL / (1 + (1.5 / calcium.Ca_jsr)^8)
+dot(Jrelp) = (Jrel_infp - Jrelp) / tau_relp
+    tau_relp_temp = btp / (1 + 0.0123 / calcium.Ca_jsr)
+    tau_relp = if(tau_relp_temp < 0.001, 0.001, tau_relp_temp)  
+fJrelp = camk.f
+Jrel = Jrel_scaling_factor * (1 - fJrelp) * Jrelnp + fJrelp * Jrelp
+    Jrel_scaling_factor = 1.0
+    desc: SR Calcium release flux via Ryanodine receptor
+    in [mmol/L/ms]
+
+#
+# Jup :: Calcium uptake via SERCA pump
+# Page 17
+#
+[serca]
+use calcium.Cai, calcium.Ca_jsr, calcium.Ca_nsr
+upScale = if(cell.mode == 1, 1.3, 1)
+Jupnp = upScale * (0.004375 * Cai / (Cai + 0.00092))
+Jupp  = upScale * (2.75 * 0.004375 * Cai / (Cai + 0.00092 - 0.00017))
+fJupp = camk.f
+Jleak = 0.0039375 * Ca_nsr / 15.0
+    in [mmol/L/ms]
+Jup = Jup_b * ((1 - fJupp) * Jupnp + fJupp * Jupp - Jleak)
+    Jup_b = 1.0
+    desc: Total Ca2+ uptake, via SERCA pump, from myoplasm to nsr
+    in [mmol/L/ms]
+
+    
+    
+[trans_flux]
+Jtr = (calcium.Ca_nsr - calcium.Ca_jsr) / 100.0
+    desc: Ca2+ translocation from nsr to jsr
+    in [mmol/L/ms]
+
+
+
+
+[[protocol]]
+# Level  Start    Length   Period   Multiplier
+1        20       0.5      1000     0
+
+[[script]]
+import matplotlib.pyplot as plt
+import myokit
+
+#
+# This example file uses the O'Hara-Rudy model in epicardial mode to produce
+# and display a single AP.
+#
+
+# Get model from magic method
+m = get_model()
+
+# Set cell type
+m.set_value('cell.mode', 1)
+types = ['Endocardial', 'Epicardial', 'Midmyocardial']
+
+# Create a pacing protocol
+bcl = 1000
+p = myokit.pacing.blocktrain(bcl, 0.5, offset=20)
+
+# Create simulation and run
+s = myokit.Simulation(m, p)
+
+# Pre-pace for a hundred beats
+s.pre(bcl*100)
+
+# Show the next 500ms
+d = s.run(500)
+
+# Display the result
+plt.figure()
+plt.suptitle('ORd2011 - '+ types[int(m.value('cell.mode'))] +' cell')
+plt.plot(d['engine.time'], d['membrane.V'])
+plt.title('Membrane potential')
+plt.show()
+

@@ -1,0 +1,19 @@
+Cell : A23
+Initial : prior
+population_size : 8
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 699  |  nUpdate : 285
+2.866060e+04
+1.538740e-01
+9.382641e+01
+1.453952e-02
+5.556590e+01
+1.452250e+02
+7.578266e+00
+1.089803e+01
+2.531559e+01
+MSE_for_param : 4.733676e-14
+best_score : -1.200467e+04
+iter : 799
+Time : 1483.543353

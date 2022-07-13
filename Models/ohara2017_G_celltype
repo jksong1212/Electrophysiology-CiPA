@@ -1,0 +1,100 @@
+# Endocardial
+params = { 
+    'cell.mode' : 0,  
+    
+    'ina.gNa' : 75.0,   
+    'inal.gNaL' : 0.0075 * 2.661,  
+    'ito.gto' : 0.02,
+    'ical.PCa' : 0.0001 * 1.007,
+    'ikr.gKr' : 4.65854545454545618e-2, # [mS/uF]
+    'iks.gKs' : 0.0034 * 1.87,
+    'ik1.gK1' : 0.1908 * 1.698,
+    'inaca.gNaCa' : 0.0008,
+    'inak.PNaK' : 30,
+    'ikb.gKb' : 0.003,
+    'inab.PNab' : 3.75e-10,
+    'icab.PCab' : 2.5e-8,
+    'ipca.GpCa' : 0.0005,
+
+    'ina.g_adj' : 1,  
+    'inal.g_adj' : 1,
+    'ito.g_adj' : 1,
+    'ical.g_adj' : 1,
+    'ikr.g_adj' : 1,
+    'iks.g_adj' : 1,
+    'ik1.g_adj' : 1,
+    'inaca.g_adj' : 1,
+    'inak.g_adj' : 1,
+    'ikb.g_adj' : 1,
+    'inab.g_adj' : 1,
+    'icab.g_adj' : 1,
+    'ipca.g_adj' : 1, 
+}
+
+
+# Epicardial
+params = { 
+    'cell.mode' : 1,
+    
+    'ina.gNa' : 75.0,   
+    'inal.gNaL' : 0.0075 * 2.661,  
+    'ito.gto' : 0.02,
+    'ical.PCa' : 0.0001 * 1.007,
+    'ikr.gKr' : 4.65854545454545618e-2, # [mS/uF]
+    'iks.gKs' : 0.0034 * 1.87,
+    'ik1.gK1' : 0.1908 * 1.698,
+    'inaca.gNaCa' : 0.0008,
+    'inak.PNaK' : 30,
+    'ikb.gKb' : 0.003,
+    'inab.PNab' : 3.75e-10,
+    'icab.PCab' : 2.5e-8,
+    'ipca.GpCa' : 0.0005,
+
+    'ina.g_adj' : 1,  
+    'inal.g_adj' : 0.6,
+    'ito.g_adj' : 4,
+    'ical.g_adj' : 1.2,
+    'ikr.g_adj' : 1.3,
+    'iks.g_adj' : 1.4,
+    'ik1.g_adj' : 1.2,
+    'inaca.g_adj' : 1.1,
+    'inak.g_adj' : 0.9,
+    'ikb.g_adj' : 0.6,
+    'inab.g_adj' : 1,
+    'icab.g_adj' : 1,
+    'ipca.g_adj' : 1, 
+}
+
+
+# Mid-myocardial
+params = { 
+    'cell.mode' : 2,
+    
+    'ina.gNa' : 75.0,   
+    'inal.gNaL' : 0.0075 * 2.661,  
+    'ito.gto' : 0.02,
+    'ical.PCa' : 0.0001 * 1.007,
+    'ikr.gKr' : 4.65854545454545618e-2, # [mS/uF]
+    'iks.gKs' : 0.0034 * 1.87,
+    'ik1.gK1' : 0.1908 * 1.698,
+    'inaca.gNaCa' : 0.0008,
+    'inak.PNaK' : 30,
+    'ikb.gKb' : 0.003,
+    'inab.PNab' : 3.75e-10,
+    'icab.PCab' : 2.5e-8,
+    'ipca.GpCa' : 0.0005,
+
+    'ina.g_adj' : 1,  
+    'inal.g_adj' : 1,
+    'ito.g_adj' : 4,
+    'ical.g_adj' : 2.5,
+    'ikr.g_adj' : 0.8,
+    'iks.g_adj' : 1,
+    'ik1.g_adj' : 1.3,
+    'inaca.g_adj' : 1.4,
+    'inak.g_adj' : 0.7,
+    'ikb.g_adj' : 1,
+    'inab.g_adj' : 1,
+    'icab.g_adj' : 1,
+    'ipca.g_adj' : 1, 
+}
