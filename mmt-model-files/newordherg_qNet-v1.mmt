@@ -1092,14 +1092,14 @@ Jdiff = (calcium.Ca_ss - calcium.Ca_i) / 0.2 [ms]
 use cell.AFC, cell.vss, cell.vmyo
 INa_tot = ina.INa + inal.INaL + inab.INab + 3 * inaca.INaCa + 3 * inak.INaK
     in [A/F]
-#dot(Na_i) = -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo
-dot(Na_i) = if(setting.simType==0, -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo, 0)
+dot(Na_i) = -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo
+#dot(Na_i) = if(setting.simType==0, -INa_tot * AFC / vmyo + diff.JdiffNa * vss / vmyo, 0)
     desc: Intracellular Potassium concentration
     in [mM]
 INa_ss_tot = ical.ICaNa + 3 * inacass.INaCa_ss
     in [A/F]
-#dot(Na_ss) = -INa_ss_tot * AFC / vss - diff.JdiffNa
-dot(Na_ss) = if(setting.simType==0, -INa_ss_tot * AFC / vss - diff.JdiffNa, 0)
+dot(Na_ss) = -INa_ss_tot * AFC / vss - diff.JdiffNa
+#dot(Na_ss) = if(setting.simType==0, -INa_ss_tot * AFC / vss - diff.JdiffNa, 0)
     in [mM]
 
 #
@@ -1119,12 +1119,12 @@ IK_tot = (
     in [A/F]
 IK_ss_tot = ical.ICaK
     in [A/F]
-#dot(K_i) = -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo
-dot(K_i) = if(setting.simType==0, -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo, 0)
+dot(K_i) = -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo
+#dot(K_i) = if(setting.simType==0, -(IK_tot + stimulus.i_stim) * AFC / vmyo + diff.JdiffK * vss / vmyo, 0)
     desc: Intracellular Potassium concentration
     in [mM]
-#dot(K_ss) = -IK_ss_tot * AFC / vss - diff.JdiffK
-dot(K_ss) = if(setting.simType==0, -IK_ss_tot * AFC / vss - diff.JdiffK, 0)
+dot(K_ss) = -IK_ss_tot * AFC / vss - diff.JdiffK
+#dot(K_ss) = if(setting.simType==0, -IK_ss_tot * AFC / vss - diff.JdiffK, 0)
     desc: Potassium concentration in the T-Tubule subspace
     in [mM]
 
@@ -1158,25 +1158,25 @@ kmcsqn = 0.8 [mM]
     in [mM]
 ICa_tot = ipca.IpCa + icab.ICab - 2 * inaca.INaCa
     in [A/F]
-#dot(Ca_i) = buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff.Jdiff * vss / vmyo)
-dot(Ca_i) = if(setting.simType==0, buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff.Jdiff * vss / vmyo), 0)
+dot(Ca_i) = buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff.Jdiff * vss / vmyo)
+#dot(Ca_i) = if(setting.simType==0, buff * (-ICa_tot * AFC / (2 * vmyo) - serca.Jup * vnsr / vmyo + diff.Jdiff * vss / vmyo), 0)
     in [mM]
     desc: Intracellular Calcium concentratium
     buff = 1 / (1 + cmdnmax * kmcmdn / (kmcmdn + Ca_i)^2 + trpnmax * kmtrpn / (kmtrpn + Ca_i)^2)
 ICa_ss_tot = ical.ICaL - 2 * inacass.INaCa_ss
     in [A/F]
-#dot(Ca_ss) = buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff)
-dot(Ca_ss) = if(setting.simType==0, buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff), 0)
+dot(Ca_ss) = buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff)
+#dot(Ca_ss) = if(setting.simType==0, buff * (-ICa_ss_tot * AFC / (2 * vss) + ryr.Jrel * vjsr / vss - diff.Jdiff), 0)
     in [mM]
     desc: Calcium concentratium in the T-Tubule subspace
     buff = 1 / (1 + BSRmax * KmBSR / (KmBSR + Ca_ss)^2 + BSLmax * KmBSL / (KmBSL + Ca_ss)^2)
-#dot(Ca_jsr) = buff * (serca.Jtr - ryr.Jrel)
-dot(Ca_jsr) = if(setting.simType==0, buff * (serca.Jtr - ryr.Jrel), 0)
+dot(Ca_jsr) = buff * (serca.Jtr - ryr.Jrel)
+#dot(Ca_jsr) = if(setting.simType==0, buff * (serca.Jtr - ryr.Jrel), 0)
     in [mM]
     desc: Calcium concentration in the JSR subspace
     buff = 1 / (1 + csqnmax * kmcsqn / (kmcsqn + Ca_jsr)^2)
-#dot(Ca_nsr) = serca.Jup - serca.Jtr * vjsr / vnsr
-dot(Ca_nsr) = if(setting.simType==0, serca.Jup - serca.Jtr * vjsr / vnsr, 0)
+dot(Ca_nsr) = serca.Jup - serca.Jtr * vjsr / vnsr
+#dot(Ca_nsr) = if(setting.simType==0, serca.Jup - serca.Jtr * vjsr / vnsr, 0)
     in [mM]
     desc: Calcium concentration in the NSR subspace
 
