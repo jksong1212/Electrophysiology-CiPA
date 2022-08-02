@@ -290,11 +290,12 @@ tjp = 1.46 * tj
 dot(jp) = (sj - jp) / tjp
     desc: Recovery from inactivation gate for phosphorylated INa
 # Current
+Gmax_adj = 1.0
 GNafc = 1.0
-GNa = 75/GNafc
+GNa = 75
     in [mS/uF]
     desc: [mS/uF] : Maximum conductance of INa
-INa = GNa * (V - rev.ENa) * m^3 * ((1 - camk.f) * h * j + camk.f * hp * jp)
+INa = (Gmax_adj*GNa/GNafc) * (V - rev.ENa) * m^3 * ((1 - camk.f) * h * j + camk.f * hp * jp)
     in [A/F]
     desc: Fast sodium current
 
@@ -323,13 +324,14 @@ shp = 1 / (1 + exp((V + 93.81 [mV]) / 7.488 [mV]))
 dot(hp) = (shp - hp) / thp
     desc: Inactivation gate for phosphorylated INaL
 # Current
+Gmax_adj = 1.0
 GNaLfc = 1.0
-GNaL = 0.0075/GNaLfc 
+GNaL = 0.0075
     in [mS/uF]
     desc: [mS/uF] : Maximum conductance of INaL
 fNaL = if(cell.mode == 1, 0.6, 1) 
     desc: Adjustment for different cell types
-INaL = fNaL * GNaL * (V - rev.ENa) * m * ((1 - camk.f) * h + camk.f * hp)
+INaL = (fNaL * Gmax_adj*GNaL/GNaLfc) * (V - rev.ENa) * m * ((1 - camk.f) * h + camk.f * hp)
     in [A/F]
 
 #
@@ -384,12 +386,13 @@ dot(isp) = (si - isp) / tisp
 ip = Aif * ifp + Ais * isp
     desc: Inactivation gate for phosphorylated Ito
 # Current
+Gmax_adj = 1.0
 Gtofc = 1.0
-Gto = 0.02/Gtofc
+Gto = 0.02
     in [mS/uF]
     desc: Maximum conductance of Ito
 fto = if(cell.mode == 0, 1, 4)
-Ito = fto * Gto * (V - rev.EK) * ((1 - camk.f) * a * i + camk.f * ap * ip)
+Ito = (fto * Gmax_adj*Gto/Gtofc) * (V - rev.EK) * ((1 - camk.f) * a * i + camk.f * ap * ip)
     desc: Transient outward Potassium current
     in [A/F]
 
@@ -501,16 +504,17 @@ B_3 = phys.FRT
 A_3 = ( 0.75 * phys.FFRT * (potassium.K_ss * exp(vfrt) - extra.K_o) ) / B_3
 U_3 = B_3 * (V-v0)
 PhiCaK = if(-1e-7<=U_3 and U_3<=1e-7, A_3 * (1.0-0.5*U_3), (A_3*U_3)/(exp(U_3)-1.0)) 
+Gmax_adj = 1.0
 PCafc = 1.0
-PCa_temp = 0.0001/PCafc 
-    in [L/ms/F]
+PCa = 0.0001
 fPCa = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 2.5) 
-PCa = fPCa * PCa_temp
-PCap = 1.1 * PCa
+final_PCa = fPCa * Gmax_adj*PCa/PCafc 
     in [L/ms/F]
-PCaNa = 0.00125 * PCa
+PCap = 1.1 * final_PCa
     in [L/ms/F]
-PCaK = 3.574e-4 * PCa
+PCaNa = 0.00125 * final_PCa
+    in [L/ms/F]
+PCaK = 3.574e-4 * final_PCa
     in [L/ms/F]
 PCaNap = 0.00125 * PCap
     in [L/ms/F]
@@ -520,7 +524,7 @@ g = d * (f  * (1 - nca) + jca * fca  * nca)
     desc: Conductivity of non-phosphorylated ICaL
 gp = d * (fp * (1 - nca) + jca * fcap * nca)
     desc: Conductivity of phosphorylated ICaL
-ICaL = (1 - camk.f) * PCa * PhiCaL * g + camk.f * PCap * PhiCaL * gp
+ICaL = (1 - camk.f) * final_PCa * PhiCaL * g + camk.f * PCap * PhiCaL * gp
     in [A/F]
     desc: Ca-component of L-type calcium current
 ICaNa = (1 - camk.f) * PCaNa * PhiCaNa * g + camk.f * PCaNap * PhiCaNa * gp
@@ -629,11 +633,12 @@ dot(IObound) = Kmax * Ku * exp(n * log(D_adj)) / (exp(n * log(D_adj)) + halfmax)
 dot(Obound) = Kmax * Ku * exp(n * log(D_adj)) / (exp(n * log(D_adj)) + halfmax) * O - Ku * Obound + Kt / (1 + exp(-(V - Vhalf) / 6.789 [mV])) * Cbound - Kt * Obound
 dot(Cbound) = -(Kt / (1 + exp(-(V - Vhalf) / 6.789 [mV])) * Cbound - Kt * Obound) - (Kt / (1 + exp(-(V - Vhalf) / 6.789 [mV])) * Cbound - Kt * IObound)
 dot(D) = 0 [1/ms]
+Gmax_adj = 1.0
 GKrfc = 1.0
-GKr = 0.046/GKrfc 
+GKr = 0.046
     in [mS/uF]
 fKr = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.3, 0.8)
-IKr = fKr * GKr * sqrt(extra.K_o / 5.4 [mM]) * O * (V - rev.EK)
+IKr = (fKr * Gmax_adj*GKr/GKrfc) * sqrt(extra.K_o / 5.4 [mM]) * O * (V - rev.EK)
     in [A/F]
 
 #
@@ -657,11 +662,12 @@ dot(x2) = (sx - x2) / tau
         desc: Time constant for fast, high voltage IKs activation
         in [ms]
 KsCa = 1 + 0.6 / (1 + (3.8e-5 [mM] / calcium.Ca_i)^1.4)
+Gmax_adj = 1.0
 GKsfc = 1.0
 GKs = 0.0034/GKsfc 
     in [mS/uF]
 fKs = if(cell.mode == 1, 1.4, 1) 
-IKs = fKs * GKs * KsCa * x1 * x2 * (V - rev.EKs)
+IKs = (fKs * Gmax_adj*GKs/GKsfc) * KsCa * x1 * x2 * (V - rev.EKs)
     desc: Slow delayed rectifier Potassium current
     in [A/F]
 
@@ -683,12 +689,13 @@ dot(x) = (inf - x) / tau
         in [ms]
 r = 1 / (1 + exp((V + 105.8 [mV] - 2.6 [mV/mM] * K_o) / 9.493 [mV]))
     desc: Inactivation of IK1
+Gmax_adj = 1.0
 GK1fc = 1.0
-GK1 = 0.1908/GK1fc 
+GK1 = 0.1908 
     in [mS/uF]
     desc: Maximum conductance for IK1 (before scaling)
 fK1 = piecewise(cell.mode == 0, 1, cell.mode == 1, 1.2, 1.3) 
-IK1 = fK1 * GK1 * sqrt(K_o / 1 [mM]) * r * x * (V - rev.EK)
+IK1 = (fK1 * Gmax_adj*GK1/GK1fc) * sqrt(K_o / 1 [mM]) * r * x * (V - rev.EK)
     desc: Inward rectifier Potassium current
     in [A/F]
 

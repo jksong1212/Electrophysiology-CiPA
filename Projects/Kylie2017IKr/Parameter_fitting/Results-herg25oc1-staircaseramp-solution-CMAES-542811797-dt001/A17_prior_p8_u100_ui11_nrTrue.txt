@@ -1,0 +1,19 @@
+Cell : A17
+Initial : prior
+population_size : 8
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 658  |  nUpdate : 266
+2.365044e+04
+1.668671e-01
+9.169926e+01
+1.739105e-02
+5.405914e+01
+1.272813e+02
+5.083510e+00
+7.156795e+00
+2.968919e+01
+MSE_for_param : 9.004344e-07
+best_score : -7.723556e+03
+iter : 758
+Time : 1269.839406
