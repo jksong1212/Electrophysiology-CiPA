@@ -15,9 +15,7 @@ import torch
 from tqdm import tqdm
  
 '''
-* ohara-cipa-v1-2017_fixedconc-v1.mmt 
-* fixed concentrations
-* cell type : Mid-myocardial
+
 '''
 
 def find_closest_index(array, t):
@@ -203,16 +201,21 @@ def get_data2(params, fileNo=0):
     if params['window']>0 and params['step_size']>0:
         temp_li = []
 
-        for x in xs:
-            temp = get_currents_with_constant_dt(params=params, x=x)
-            temp_li.append(temp)
+        if type(params['t_eval']) != type(None):
+            for x in xs:
+                temp = get_currents_with_constant_dt(params=params, x=[params['t_eval'], x])
+                temp_li.append(temp)
+        else :
+            for x in xs:
+                temp = get_currents_with_constant_dt(params=params, x=x)
+                temp_li.append(temp)
 
         return np.array(temp_li), ys
     else :
         return xs, ys
 
 # This method is useful of a case that the number of dataset is large
-def get_dataset2(file_numbers, window=10, step_size=5, window_type='avg', noise_sigma=0, multi=False, torch_tensor=False):             
+def get_dataset2(file_numbers, window=10, step_size=5, window_type='avg', noise_sigma=0, t_eval=None, multi=False, torch_tensor=False):             
     start_time = time.time()
 
     processes = len(file_numbers)
@@ -224,6 +227,7 @@ def get_dataset2(file_numbers, window=10, step_size=5, window_type='avg', noise_
         'step_size' : step_size,   
         'window_type' : window_type,
         'noise_sigma' : noise_sigma,        
+        't_eval' : t_eval,
     }  
 
     xs_li = []
