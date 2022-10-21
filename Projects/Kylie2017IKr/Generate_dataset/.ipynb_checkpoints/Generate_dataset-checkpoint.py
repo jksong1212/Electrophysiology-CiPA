@@ -101,7 +101,7 @@ model.get('phys.T').set_rhs(temperature)
 # Set concentration
 model.get('potassium.Ko').set_rhs(float(4.0))
 model.get('potassium.Ki').set_rhs(float(110.0))
-sim = simulator_myokit.Simulator(model, VC_protocol, max_step=1e-3, abs_tol=1e-12, rel_tol=1e-14, vhold=-80e-3)  # 1e-12, 1e-14  # 1e-08, 1e-10
+sim = simulator_myokit.Simulator(model, VC_protocol, max_step=1e-5, abs_tol=1e-12, rel_tol=1e-14, vhold=-80e-3)  # 1e-12, 1e-14  # 1e-08, 1e-10
 sim.name = "kylie2017IKr"  
 print("--- %s seconds ---"%(time.time()-start_time))
 
