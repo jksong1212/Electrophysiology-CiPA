@@ -1,0 +1,19 @@
+Cell : C20
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 208  |  nUpdate : 85
+2.474122e+04
+1.542383e-01
+7.757672e+01
+2.640409e-02
+4.865263e+01
+8.248065e+01
+1.855983e+01
+6.377592e+00
+3.140689e+01
+MSE_for_param : 7.113922e-11
+best_score : -9.024830e+03
+iter : 308
+Time : 359.665370

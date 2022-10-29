@@ -1,0 +1,19 @@
+Cell : C02
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 236  |  nUpdate : 124
+4.596429e+04
+1.581506e-01
+8.733492e+01
+5.787811e-02
+3.966527e+01
+8.282974e+01
+3.044179e+01
+7.373518e+00
+2.972852e+01
+MSE_for_param : 1.207882e-12
+best_score : -1.841316e+04
+iter : 336
+Time : 392.729291

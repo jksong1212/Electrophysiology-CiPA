@@ -1,0 +1,19 @@
+Cell : H22
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 378  |  nUpdate : 117
+3.270205e+04
+7.970703e-02
+1.002720e+02
+4.298986e-02
+4.151061e+01
+9.193217e+01
+2.685544e+01
+7.213245e+00
+3.121727e+01
+MSE_for_param : 1.401098e-14
+best_score : -1.281119e+04
+iter : 478
+Time : 547.329953

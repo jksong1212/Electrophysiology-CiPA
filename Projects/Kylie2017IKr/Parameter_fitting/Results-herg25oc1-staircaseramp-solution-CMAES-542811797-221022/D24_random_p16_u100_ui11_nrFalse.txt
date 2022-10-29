@@ -1,0 +1,19 @@
+Cell : D24
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 706  |  nUpdate : 230
+1.717286e+04
+1.000000e-04
+2.826054e+02
+1.326718e-01
+3.350244e+01
+1.000000e-04
+3.744293e+02
+3.723603e-02
+7.402117e+01
+MSE_for_param : 1.839716e-01
+best_score : -1.685713e+04
+iter : 806
+Time : 803.561016

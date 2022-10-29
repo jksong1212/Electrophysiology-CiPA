@@ -1,0 +1,19 @@
+Cell : E18
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 660  |  nUpdate : 271
+5.859845e+04
+1.080079e-01
+8.245371e+01
+5.678577e-02
+3.935558e+01
+6.974317e+01
+2.979308e+01
+8.633046e+00
+3.135549e+01
+MSE_for_param : 1.228423e-14
+best_score : -2.431944e+04
+iter : 760
+Time : 859.328368

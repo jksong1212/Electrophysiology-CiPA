@@ -1,0 +1,19 @@
+Cell : H10
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 719  |  nUpdate : 271
+3.187573e+04
+5.805752e-02
+1.099841e+02
+3.222876e-02
+4.685364e+01
+8.126700e+01
+2.149736e+01
+6.948600e+00
+2.980069e+01
+MSE_for_param : 1.790700e-15
+best_score : -1.074154e+04
+iter : 819
+Time : 918.865088

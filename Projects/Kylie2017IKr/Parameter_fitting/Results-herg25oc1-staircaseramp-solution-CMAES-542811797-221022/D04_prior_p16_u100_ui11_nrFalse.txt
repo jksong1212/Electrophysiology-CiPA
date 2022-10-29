@@ -1,0 +1,19 @@
+Cell : D04
+Initial : prior
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 425  |  nUpdate : 192
+3.567178e+04
+3.085921e-02
+1.167112e+02
+4.636579e-02
+4.201654e+01
+8.774360e+01
+2.924706e+01
+8.576202e+00
+3.099749e+01
+MSE_for_param : 1.743533e-14
+best_score : -1.124828e+04
+iter : 525
+Time : 608.604281

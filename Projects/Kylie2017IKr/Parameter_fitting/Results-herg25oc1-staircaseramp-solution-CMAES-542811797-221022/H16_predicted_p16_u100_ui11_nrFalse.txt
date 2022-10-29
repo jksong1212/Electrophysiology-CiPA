@@ -1,0 +1,19 @@
+Cell : H16
+Initial : predicted
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 242  |  nUpdate : 91
+5.715165e+04
+1.096705e-01
+9.245365e+01
+7.455268e-02
+3.495932e+01
+6.607815e+01
+3.446763e+01
+1.131383e+01
+2.861824e+01
+MSE_for_param : 1.073701e-15
+best_score : -2.840807e+04
+iter : 342
+Time : 394.255191

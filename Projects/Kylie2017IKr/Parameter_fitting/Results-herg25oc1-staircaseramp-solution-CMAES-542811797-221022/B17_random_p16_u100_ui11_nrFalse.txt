@@ -1,0 +1,19 @@
+Cell : B17
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 337  |  nUpdate : 122
+4.386112e+04
+2.292258e-01
+7.633424e+01
+4.135659e-02
+4.337800e+01
+7.185657e+01
+2.692122e+01
+1.060352e+01
+2.943645e+01
+MSE_for_param : 3.490497e-15
+best_score : -1.833755e+04
+iter : 437
+Time : 508.660947

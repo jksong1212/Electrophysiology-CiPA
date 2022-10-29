@@ -1,0 +1,19 @@
+Cell : A09
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 637  |  nUpdate : 197
+2.764739e+04
+1.000000e-04
+2.721852e+02
+1.622294e-01
+3.189319e+01
+1.000000e-04
+3.688476e+02
+5.205193e-02
+7.000567e+01
+MSE_for_param : 1.589882e-01
+best_score : -3.245722e+04
+iter : 737
+Time : 728.880782

@@ -1,0 +1,19 @@
+Cell : E10
+Initial : predicted
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 386  |  nUpdate : 91
+3.404032e+04
+1.174300e-01
+8.706915e+01
+3.151674e-02
+4.937281e+01
+8.566151e+01
+1.290829e+01
+6.710811e+00
+3.132662e+01
+MSE_for_param : 4.021566e-15
+best_score : -9.611922e+03
+iter : 486
+Time : 547.250541

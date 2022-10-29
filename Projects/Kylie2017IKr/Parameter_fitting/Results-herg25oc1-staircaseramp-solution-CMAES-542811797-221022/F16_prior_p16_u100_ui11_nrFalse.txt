@@ -1,0 +1,19 @@
+Cell : F16
+Initial : prior
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 787  |  nUpdate : 227
+2.091533e+04
+3.882574e-02
+1.096469e+02
+3.707402e-02
+4.599167e+01
+8.460248e+01
+2.157680e+01
+6.234856e+00
+3.286968e+01
+MSE_for_param : 3.068599e-15
+best_score : -8.121877e+03
+iter : 887
+Time : 1021.627947

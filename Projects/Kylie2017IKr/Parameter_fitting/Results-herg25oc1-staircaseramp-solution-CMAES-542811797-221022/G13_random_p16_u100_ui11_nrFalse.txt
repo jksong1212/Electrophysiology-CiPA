@@ -1,0 +1,19 @@
+Cell : G13
+Initial : random
+population_size : 16
+max_unchanged_iter : 100
+unchanged_iter_threshold : 1.000000e-11
+Epoch : 1209  |  nUpdate : 435
+4.258141e+04
+3.434287e-04
+2.241510e+02
+1.340068e-01
+3.689814e+01
+1.000000e-04
+3.467484e+02
+8.030809e-02
+6.222870e+01
+MSE_for_param : 1.466207e-01
+best_score : -8.265342e+04
+iter : 1309
+Time : 1295.904533
