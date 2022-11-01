@@ -114,7 +114,7 @@ class Simulator:
         if sim_type==0:            
             self.simulation.pre(pre_step) # self.bcl*100
             
-        elif sim_type==1:  # myokit.pacing.constant(self.vhold)
+        elif sim_type==1:  # 
             self.pre_simulation.reset()
             self.simulation.reset()
             self.pre_simulation.set_state(self.pre_init_state)
@@ -122,7 +122,7 @@ class Simulator:
             self.pre_simulation.pre(pre_step)
             self.simulation.set_state(self.pre_simulation.state())
 
-        elif sim_type==2:  # myokit.pacing.constant(self.vhold)
+        elif sim_type==2:  # 
             self.pre_simulation.reset()
             self.simulation.reset()
             self.pre_simulation.set_state(self.pre_init_state)
