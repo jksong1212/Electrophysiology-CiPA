@@ -134,32 +134,56 @@ class Simulator:
         
         return self.simulation.state()
         
-    def simulate(self, end_time, log_times=None, extra_log=[]):      
+    def simulate(self, end_time, log_times=None, extra_log=[], apd_variable=None, apd_threshold=None, log_interval=None):      
         
         if not self.pre_sim_state:
             self.simulation.reset()     
             self.simulation.set_state(self.init_state)
         
         # Run simulation
+        d = None
+        apds = None        
         try:
-            d = self.simulation.run(end_time,
-                                         log_times = log_times,
-                                         log = ['engine.time', 'membrane.V'] + extra_log,
-                                        ).npview()
+            if apd_variable==None and apd_threshold==None:
+                d = self.simulation.run(end_time,
+                                        log_times = log_times,
+                                        log = ['engine.time', 'membrane.V'] + extra_log,
+                                        log_interval = log_interval
+                                       )
+                if extra_log:            
+                    self.current_response_info = mod_trace.CurrentResponseInfo()
+                    for i in range(len(d['engine.time'])):     
+                        current_timestep = []
+                        for name in extra_log:
+                            current_timestep.append(mod_trace.Current(name=name.split('.')[1], value=d[name][i]))
+                        self.current_response_info.currents.append(current_timestep)
+
+                self.pre_sim_state = False
+
+                return d
+            else:
+                d, apds = self.simulation.run(end_time,
+                                              log_times = log_times,
+                                              log = ['engine.time', 'membrane.V'] + extra_log,
+                                              log_interval = log_interval,
+                                              apd_variable=apd_variable, apd_threshold=apd_threshold
+                                             )            
+                if extra_log:            
+                    self.current_response_info = mod_trace.CurrentResponseInfo()
+                    for i in range(len(d['engine.time'])):     
+                        current_timestep = []
+                        for name in extra_log:
+                            current_timestep.append(mod_trace.Current(name=name.split('.')[1], value=d[name][i]))
+                        self.current_response_info.currents.append(current_timestep)
+
+                self.pre_sim_state = False
+
+                return d, apds
+            
         except myokit.SimulationError:
             return float('inf')
             
-        if extra_log:            
-            self.current_response_info = mod_trace.CurrentResponseInfo()
-            for i in range(len(d['engine.time'])):     
-                current_timestep = []
-                for name in extra_log:
-                    current_timestep.append(mod_trace.Current(name=name.split('.')[1], value=d[name][i]))
-                self.current_response_info.currents.append(current_timestep)
-            
-        self.pre_sim_state = False
-            
-        return d
+        
 
 
     def transform_to_mmt_ramp_script(self, ramp, time_start):            
