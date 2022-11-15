@@ -112,6 +112,10 @@ class Simulator:
         self.simulation.reset()        
         
         if sim_type==0:            
+            self.pre_simulation.reset()
+            self.simulation.reset()
+            self.pre_simulation.set_state(self.pre_init_state)
+            self.simulation.set_state(self.pre_init_state)            
             self.simulation.pre(pre_step) # self.bcl*100
             
         elif sim_type==1:  # 
