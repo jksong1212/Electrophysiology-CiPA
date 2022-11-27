@@ -144,9 +144,7 @@ class Simulator:
             self.simulation.reset()     
             self.simulation.set_state(self.init_state)
         
-        # Run simulation
-        d = None
-        apds = None        
+        # Run simulation               
         try:
             if apd_variable==None and apd_threshold==None:
                 d = self.simulation.run(end_time,
@@ -163,9 +161,12 @@ class Simulator:
                         self.current_response_info.currents.append(current_timestep)
 
                 self.pre_sim_state = False
+                
+                for key, value in d.items():
+                    d[key] = np.array(value)
 
                 return d
-            else:
+            else:                
                 d, apds = self.simulation.run(end_time,
                                               log_times = log_times,
                                               log = ['engine.time', 'membrane.V'] + extra_log,
@@ -181,6 +182,9 @@ class Simulator:
                         self.current_response_info.currents.append(current_timestep)
 
                 self.pre_sim_state = False
+                
+                for key, value in d.items():
+                    d[key] = np.array(value)
 
                 return d, apds
             
