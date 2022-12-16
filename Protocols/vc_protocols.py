@@ -85,8 +85,12 @@ def leak_staircase():
     return VC_protocol
 
 
-def leemV1_CiPA():    
-    
+
+
+def leemV1():    
+    '''
+    for seven ion channels
+    '''
     VC_protocol = protocol_lib.VoltageClampProtocol()  # steps=steps
     VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
     VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-90, duration=100) )
@@ -101,3 +105,20 @@ def leemV1_CiPA():
     return VC_protocol
 
 
+def leemV2():
+    '''
+    for seven ion channels
+    '''
+    VC_protocol = protocol_lib.VoltageClampProtocol()
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=10) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-90, duration=20) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-70, duration=20) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-35, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=0, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=40, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=10, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=50, duration=400) )
+    VC_protocol.add( protocol_lib.VoltageClampRamp(voltage_start=50, voltage_end=-120, duration=200)) # ramp step
+    
+    return VC_protocol
