@@ -122,3 +122,63 @@ def leemV2():
     VC_protocol.add( protocol_lib.VoltageClampRamp(voltage_start=50, voltage_end=-120, duration=200)) # ramp step
     
     return VC_protocol
+
+
+def leemV3():    
+    '''
+    for seven ion channels
+    '''    
+    VC_protocol = protocol_lib.VoltageClampProtocol()    
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-90, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-70, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-35, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-40, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=0, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-40, duration=80) )  
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=40, duration=500) )
+    VC_protocol.add( protocol_lib.VoltageClampRamp(voltage_start=40, voltage_end=-120, duration=200)) # ramp step
+    
+    return VC_protocol
+
+
+def leemV3_1():    
+    '''
+    for seven ion channels
+    '''    
+    VC_protocol = protocol_lib.VoltageClampProtocol()    
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-90, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-70, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-35, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-40, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=0, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-40, duration=100) )  
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=40, duration=500) )
+    VC_protocol.add( protocol_lib.VoltageClampRamp(voltage_start=40, voltage_end=-120, duration=200)) # ramp step
+    
+    return VC_protocol
+
+def leemV4():    
+    '''
+    for seven ion channels
+    '''
+    VC_protocol = protocol_lib.VoltageClampProtocol()
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-90, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-70, duration=40) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-35, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-80, duration=100) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-40, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=0, duration=50) )
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=-60, duration=80) )  
+    VC_protocol.add( protocol_lib.VoltageClampStep(voltage=40, duration=500) )
+    VC_protocol.add( protocol_lib.VoltageClampRamp(voltage_start=40, voltage_end=-120, duration=200)) # ramp step
+    
+    return VC_protocol
+
