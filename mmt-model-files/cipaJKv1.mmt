@@ -3,7 +3,9 @@ name: ohara-cipa-2017
 display_name: O'Hara-CiPA-v1, 2017
 version: 20220201
 mmt_authors: Michael Clerx
+revised: Jaekyung Song
 desc: """
+    - All ion concentration were fixed.
     The 2017 "CiPA v1" update [1] of the O'Hara et al. model of the human
     ventricular AP [2].
 
@@ -405,9 +407,9 @@ Ito = fto * (Gto/Gtofc) * (V - rev.EK) * ((1 - camk.f) * a * i + camk.f * ap * i
 # for CaMKII phosphorylated channels.
 #
 [ical]
+V = if(setting.simType==0, membrane.V, membrane.VC)
 use extra.Ca_o, extra.K_o, extra.Na_o
 use calcium.Ca_ss, potassium.K_ss, sodium.Na_ss
-V = if(setting.simType==0, membrane.V, membrane.VC)
 vfrt = V * phys.FRT
 vffrt = V * phys.FFRT
     in [C/mol]
@@ -697,9 +699,9 @@ IK1 = fK1 * (GK1/GK1fc) * sqrt(K_o / 1 [mM]) * r * x * (V - rev.EK)
 # page 12 of the appendix to [2]
 #
 [inaca]
+V = if(setting.simType==0, membrane.V, membrane.VC)
 use extra.Na_o, extra.Ca_o
 use sodium.Na_i, calcium.Ca_i
-V = if(setting.simType==0, membrane.V, membrane.VC)
 kna1 = 15 [mM]
     in [mM]
 kna2 = 5 [mM]
@@ -792,10 +794,10 @@ INaCa_total = INaCa + inacass.INaCa_ss
 # Page 12 of the appendix to [2]
 #
 [inacass]
+V = if(setting.simType==0, membrane.V, membrane.VC)
 use extra.Na_o, extra.Ca_o
 use sodium.Na_ss, calcium.Ca_ss
 use inaca.kna1, inaca.kna2, inaca.kna3, inaca.hna
-V = if(setting.simType==0, membrane.V, membrane.VC)
 # Parameters h
 h1 = 1 + Na_ss / kna3 * (1 + hna)
 h2 = Na_ss * hna / (kna3 * h1)
@@ -861,9 +863,9 @@ INaCa_ss = 0.2 * inaca.fNaCa * inaca.Gncx * allo * (JncxNa + 2 * JncxCa)
 # Page 14 of the appendix to [2]
 #
 [inak]
+V = if(setting.simType==0, membrane.V, membrane.VC)
 use extra.Na_o, sodium.Na_i, sodium.Na_ss
 use extra.K_o, potassium.K_i, potassium.K_ss
-V = if(setting.simType==0, membrane.V, membrane.VC)
 k1p = 949.5 [1/s]
     in [1/s]
 k1m = 182.4 [1/s/mM]

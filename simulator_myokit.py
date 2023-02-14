@@ -65,6 +65,9 @@ class Simulator:
         self.pre_simulation = myokit.Simulation( self.model, p_const )
         self.pre_init_state = self.pre_simulation.state()
 
+        # self.pre_simulation.set_tolerance(abs_tol=self.abs_tol, rel_tol=self.rel_tol)  # 1e-12, 1e-14  # 1e-08 and rel_tol ¼ 1e-10
+        # self.pre_simulation.set_max_step_size(self.max_step)
+
         # model = copy.copy(self.model)
         # p_const = protocol_lib.VoltageClampProtocol( [protocol_lib.VoltageClampStep(voltage=vhold, duration=100000)] )
         # if isinstance(p_const, protocol_lib.VoltageClampProtocol) or isinstance(p_const, mod_protocols.VoltageClampProtocol):
